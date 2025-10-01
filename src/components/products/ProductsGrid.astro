@@ -1,0 +1,9 @@
+---
+const { category } = Astro.params
+const url = `${import.meta.env.API_URL}/freshcoffee_products?freshcoffee_category_slug=${category}`
+const res = await fetch(url)
+const json = await res.json()
+console.log(json)
+---
+
+<h1>ProductsGrid</h1>
