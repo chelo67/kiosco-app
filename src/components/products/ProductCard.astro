@@ -1,0 +1,21 @@
+---
+import {Picture} from 'astro:assets'
+import type {Product} from '@/types'
+interface Props {
+    product: Product
+}
+const {product} = Astro.props
+---
+
+<div class="border border-gray-200">
+    <Picture
+        src={product.featured_images.full.url}
+        width={product.featured_images.full.width}
+        height={product.featured_images.full.height}
+        alt={`Imagen de ${product.title.rendered}`}
+        formats={['avif', 'webp']}
+    />
+    <div class="p-5">
+        <h3 class="text-lg font-black h-20">{product.title.rendered}</h3>
+    </div>
+</div>
