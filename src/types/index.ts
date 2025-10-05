@@ -1,4 +1,5 @@
 import {z} from 'astro:content'
+import { number } from 'astro:schema';
 
 const ImageSchema = z.object({
   url: z.string().url(),
@@ -63,3 +64,11 @@ const ProductWithVariablePriceSchema = ProductSchema.extend({
   acf:VariablePriceSchema
 })
 export type ProductWithVariablePrice = z.infer<typeof ProductWithVariablePriceSchema>
+
+const SelectedProductSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.number(),
+  size: z.optional(z.string())
+})
+export type SelectedProduct = z.infer<typeof SelectedProductSchema>
