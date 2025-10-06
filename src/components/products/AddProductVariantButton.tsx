@@ -1,3 +1,4 @@
+import { useOrderStore } from "@/stores/order"
 import type { SelectedProduct } from "@/types"
 
 type Props = {
@@ -6,8 +7,10 @@ type Props = {
 
 export default function AddProductVariantButton({product}: Props) {
 
+    const {addItem} = useOrderStore()
+
     const handleClick = () => {
-        console.log(product)
+        addItem(product)
     }
 
   return (
