@@ -2,11 +2,17 @@ import type { OrderItem, SelectedProduct } from '@/types'
 import {create} from 'zustand'
 
 type Store = {
+    isOrderDrawerOpen: boolean
+    toggleOrderDrawer: () => void
     order: OrderItem[]
     addItem: (product : SelectedProduct ) => void
 }
 
 export const useOrderStore = create<Store>()((set, get) => ({
+    isOrderDrawerOpen: false,
+    toggleOrderDrawer: () => {
+        set((state) => ({ isOrderDrawerOpen: !state.isOrderDrawerOpen}))
+    },
     order: [],
     addItem: (product) => {
 
