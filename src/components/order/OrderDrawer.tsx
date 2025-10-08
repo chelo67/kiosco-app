@@ -1,13 +1,22 @@
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useOrderStore } from '@/stores/order'
-
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useOrderStore } from "@/stores/order";
+import OrderContents from "./OrderContents";
 
 export default function OrderDrawer() {
-    const {isOrderDrawerOpen, toggleOrderDrawer} = useOrderStore()
+  const { isOrderDrawerOpen, toggleOrderDrawer } = useOrderStore();
   return (
     <div>
-      <Dialog open={isOrderDrawerOpen} onClose={toggleOrderDrawer} className="relative z-10">
+      <Dialog
+        open={isOrderDrawerOpen}
+        onClose={toggleOrderDrawer}
+        className="relative z-10"
+      >
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-gray-800/80 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
@@ -23,7 +32,9 @@ export default function OrderDrawer() {
                 <div className="flex h-full flex-col overflow-y-auto bg-white py-6 shadow-xl">
                   <div className="px-4 sm:px-6">
                     <div className="flex items-start justify-between">
-                      <DialogTitle className="text-4xl font-bold text-gray-900">Resumen de Pedido.</DialogTitle>
+                      <DialogTitle className="text-4xl font-bold text-gray-900">
+                        Resumen de Pedido.
+                      </DialogTitle>
                       <div className="ml-3 flex h-7 items-center">
                         <button
                           type="button"
@@ -38,7 +49,7 @@ export default function OrderDrawer() {
                     </div>
                   </div>
                   <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                    {/* OrderContents aquí */}
+                    <OrderContents />
                   </div>
                 </div>
               </DialogPanel>
@@ -47,5 +58,5 @@ export default function OrderDrawer() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }
