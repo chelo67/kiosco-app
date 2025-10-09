@@ -1,5 +1,6 @@
 import { useOrderStore } from "@/stores/order"
 import type { SelectedProduct } from "@/types"
+import { toast } from 'react-toastify'
 
 type Props = {
     product: SelectedProduct
@@ -11,6 +12,7 @@ export default function AddProductVariantButton({product}: Props) {
 
     const handleClick = () => {
         addItem(product)
+        toast.success('Agregado correctamente')
     }
 
   return (

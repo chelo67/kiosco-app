@@ -1,9 +1,10 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import CategoriesSidebar from "@/components/categories/CategoriesSidebar.astro";
 import Layout from "./Layout.astro";
 import OrderDrawer from "@/components/order/OrderDrawer";
 ---
-
+<ClientRouter />
 <Layout title="Kiosco de pedidos">
     <div class="md:flex">
         <CategoriesSidebar />
