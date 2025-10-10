@@ -13,8 +13,10 @@ export default function OrderContents() {
             <>
                 <h2 className="text-2xl font-bold text-gray-900">Ajusta tu pedido</h2>
                 {order.map( item => {
+                    const key = item.size ? `${item.size}-${item.id}`  : item.id 
                     return (
-                        <ProductDetails 
+                        <ProductDetails
+                            key={key}
                             item={item}
                         />
                     )

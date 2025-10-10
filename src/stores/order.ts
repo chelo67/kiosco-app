@@ -1,4 +1,5 @@
 import type { OrderItem, SelectedProduct } from '@/types'
+import { toLowerFirstChar } from '@/utils'
 import {create} from 'zustand'
 
 type Store = {
@@ -18,10 +19,15 @@ export const useOrderStore = create<Store>()((set, get) => ({
 
         const currentOrder = get().order
 
+        //revisar si el producto es variable
+        const hasSize = Boolean(product.size)
+        const key = hasSize ? `${product.id}-${toLowerFirstChar(product.size!)}`  : undefined
+
         const newItem = {
             ...product,
             quantity: 1,
-            subtotal: product.price
+            subtotal: product.price,
+            key
         }
         const order = [...currentOrder, newItem] 
         set({order})
