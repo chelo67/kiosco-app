@@ -23,13 +23,32 @@ export const useOrderStore = create<Store>()((set, get) => ({
         const hasSize = Boolean(product.size)
         const key = hasSize ? `${product.id}-${toLowerFirstChar(product.size!)}`  : undefined
 
-        const newItem = {
+        //Encontrar el producto duplicado
+        const isMatch = (item: OrderItem) => hasSize ? item.key === key : item.id === product.id
+        const existingItem = currentOrder.find(isMatch)
+
+        let order : OrderItem[]
+        if(existingItem) {
+            order = currentOrder.map(item =>
+                isMatch(item)
+                    ? {
+                        ...item,
+                        quantity: item.quantity + 1,
+                        subtotal: item.price * (item.quantity + 1)
+                    }
+                    : item
+            )
+        } else {
+            const newItem = {
             ...product,
             quantity: 1,
             subtotal: product.price,
             key
         }
-        const order = [...currentOrder, newItem] 
+            order = [...currentOrder, newItem] 
+        }
+
+        
         set({order})
 
         console.log(get().order)
