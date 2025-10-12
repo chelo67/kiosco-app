@@ -7,6 +7,9 @@ type Store = {
     toggleOrderDrawer: () => void
     order: OrderItem[]
     addItem: (product : SelectedProduct ) => void
+    deleteItem: (product: OrderItem) => void
+    increaseQuantity: (product: OrderItem) => void
+    decreaseQuantity: (product: OrderItem) => void
 }
 
 export const useOrderStore = create<Store>()((set, get) => ({
@@ -52,5 +55,40 @@ export const useOrderStore = create<Store>()((set, get) => ({
         set({order})
 
         console.log(get().order)
+    },
+    deleteItem: (product) => {
+        const order = get().order.filter(item =>
+            product.key ? item.key !== product.key : item.id !== product.id
+        )
+        set({order})
+    },
+    increaseQuantity: (product) => {
+        const isMatch = (item: OrderItem) => product.key ? item.key === product.key : item.id === product.id
+
+        const order = get().order.map(item =>
+            isMatch(item) ?
+            {
+                ...item,
+                quantity: item.quantity + 1,
+                subtotal: item.price * (item.quantity + 1)
+            }
+            : item
+        )
+        set({order})
+    },
+
+    decreaseQuantity: (product) => {
+        const isMatch = (item: OrderItem) => product.key ? item.key === product.key : item.id === product.id
+
+        const order = get().order.map(item =>
+            isMatch(item) ?
+            {
+                ...item,
+                quantity: item.quantity - 1,
+                subtotal: item.price * (item.quantity - 1)
+            }
+            : item
+        )
+        set({order})
     }
 }))

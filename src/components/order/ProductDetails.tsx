@@ -1,11 +1,19 @@
 import type { OrderItem } from '@/types'
 import { formatCurrency } from '@/utils'
 import { XCircleIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
+import { useOrderStore } from '@/stores/order'
+
 
 type Props = {
     item: OrderItem
 }
+
+const MIN_ITEMS = 1
+
 export default function ProductDetails({item} : Props) {
+
+  const { deleteItem, increaseQuantity, decreaseQuantity } = useOrderStore()
+  const isDecreaseDisabled = item.quantity === MIN_ITEMS
   return (
     <div className="shadow space-y-1 p-4 bg-white  border-t border-gray-200 mt-5 ">
       <div className="space-y-4">
@@ -14,7 +22,7 @@ export default function ProductDetails({item} : Props) {
           <button
             className='cursor-pointer'
             type="button"
-            onClick={() => {}}
+            onClick={() => {deleteItem(item)}}
           >
             <XCircleIcon className="text-red-600 h-8 w-8" />
           </button>
@@ -26,7 +34,8 @@ export default function ProductDetails({item} : Props) {
         <div className="flex justify-center gap-5 px-10 py-2 border border-gray-600 rounded-lg">
           <button
             type="button"
-            onClick={() => {}}
+            disabled={isDecreaseDisabled}
+            onClick={() => decreaseQuantity(item)}
             className='disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer'
           >
             <MinusIcon className="h-6 w-6" />
@@ -38,7 +47,7 @@ export default function ProductDetails({item} : Props) {
 
           <button
             type='button'
-            onClick={() => {}}
+            onClick={() => increaseQuantity(item)}
             className="disabled:opacity-10 disabled:cursor-not-allowed cursor-pointer"
           >
             <PlusIcon className="h-6 w-6" />
