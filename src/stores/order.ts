@@ -10,6 +10,7 @@ type Store = {
     deleteItem: (product: OrderItem) => void
     increaseQuantity: (product: OrderItem) => void
     decreaseQuantity: (product: OrderItem) => void
+    updateItemSize: (product: OrderItem, newSize: OrderItem['size']) => void
 }
 
 export const useOrderStore = create<Store>()((set, get) => ({
@@ -90,5 +91,23 @@ export const useOrderStore = create<Store>()((set, get) => ({
             : item
         )
         set({order})
-    }
+    },
+    updateItemSize: (product, newSize) => {
+        if(!product.key || !newSize) return
+
+        const order = get().order
+        const newKey = `${product.id}-${toLowerFirstChar(newSize)}`
+        const isMatch = (item: OrderItem, key:string) => item.key === key
+        const selectedIndex = order.findIndex(item => isMatch(item, product.key!))
+
+        let updatedOrder = [...order]
+
+        updatedOrder[selectedIndex] = {
+            ...product,
+            key: newKey,
+            size: newSize
+        }
+
+        set({order: updatedOrder})
+    },
 }))
