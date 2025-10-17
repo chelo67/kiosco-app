@@ -1,9 +1,12 @@
 import { useOrderStore } from "@/stores/order"
 import ProductDetails from "./ProductDetails"
+import { calculateTotal, formatCurrency } from "@/utils"
 
 export default function OrderContents() {
 
     const {order} = useOrderStore()
+
+    const total = calculateTotal(order)
 
   return (
     <>
@@ -21,8 +24,14 @@ export default function OrderContents() {
                         />
                     )
                 })}
+
+                <h2 className="mt-5 text-2xl font-bold text-right">
+                    Total a Pagar: {formatCurrency(total)}
+                </h2>
             </>
         }
+
+
     </>
   )
 }

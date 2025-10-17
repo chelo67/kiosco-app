@@ -1,4 +1,4 @@
-import type { OrderItem, SelectedProduct } from '@/types'
+import type { OrderItem, ProductWithVariablePrice, SelectedProduct } from '@/types'
 import { toLowerFirstChar } from '@/utils'
 import {create} from 'zustand'
 
@@ -92,20 +92,55 @@ export const useOrderStore = create<Store>()((set, get) => ({
         )
         set({order})
     },
-    updateItemSize: (product, newSize) => {
+    updateItemSize: async (product, newSize) => {
         if(!product.key || !newSize) return
 
+        const res = await fetch(`/api/products/${product.id}`)
+        const data = await res.json() as ProductWithVariablePrice
+
+        const updatedData = Object.values(data.acf)
+            .filter( (value) : value is {size: string, price: number} =>
+                typeof value === 'object' &&
+                value !== null &&
+                'size' in value &&
+                'price' in value
+            ).find(value => value.size === newSize)
+
+            if(!updatedData) return 
+
         const order = get().order
+
         const newKey = `${product.id}-${toLowerFirstChar(newSize)}`
+
         const isMatch = (item: OrderItem, key:string) => item.key === key
+
         const selectedIndex = order.findIndex(item => isMatch(item, product.key!))
+        const existingIndex = order.findIndex(item => isMatch(item, newKey))
 
         let updatedOrder = [...order]
 
-        updatedOrder[selectedIndex] = {
-            ...product,
-            key: newKey,
-            size: newSize
+        if(existingIndex !== -1) {
+            const existingItem = updatedOrder[existingIndex]
+            const mergedQuantity = existingItem.quantity + product.quantity
+
+            updatedOrder[existingIndex] = {
+                ...existingItem,
+                quantity: mergedQuantity,
+                subtotal: mergedQuantity * existingItem.price
+            }
+
+            if(existingIndex !== selectedIndex) {
+                updatedOrder.splice(selectedIndex, 1)
+            }
+
+        } else {
+                updatedOrder[selectedIndex] = {
+                ...product,
+                key: newKey,
+                size: newSize,
+                price: updatedData.price,
+                subtotal: product.quantity * updatedData.price
+            }
         }
 
         set({order: updatedOrder})
