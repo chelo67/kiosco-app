@@ -1,10 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import AuthLayout from '@/layouts/AuthLayout.astro';
+
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout title='Inicio'>
-	<h1 class="text-6xl">Inicio</h1>
-</Layout>
+<AuthLayout title="Comenzar Nueva Orden">
+	<button
+		id="guest-login"
+		class="border border-amber-400 hover:bg-amber-400 px-5 py-3 cursor-pointer rounded-lg mx-auto 2xl uppercase font-black"
+	>
+		Presiona aqui
+	</button>
+</AuthLayout>
