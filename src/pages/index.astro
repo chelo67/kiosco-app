@@ -14,3 +14,13 @@ import AuthLayout from '@/layouts/AuthLayout.astro';
 		Presiona aqui
 	</button>
 </AuthLayout>
+
+<script>
+	import { actions } from 'astro:actions'
+	const guestLoginBtn = document.querySelector('#guest-login')
+	if(guestLoginBtn) {
+		guestLoginBtn.addEventListener('click', async function(e) {
+			await actions.auth.signinAsGuest()
+		})
+	}
+</script>
