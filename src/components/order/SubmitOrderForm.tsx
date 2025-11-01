@@ -1,16 +1,36 @@
+import { useOrderStore } from "@/stores/order"
+import { actions, isActionError } from "astro:actions"
+import { toast } from "react-toastify"
 
-
+function isInputError(error: any): error is { issues: { message: string }[] } {
+  return Boolean(error && Array.isArray((error as any).issues))
+}
 
 export default function SubmitOrderForm() {
 
-    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const {order} = useOrderStore()
+
+    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const form = e.target as HTMLFormElement
         const formData = new FormData(form)
         const name = formData.get('name')?.toString() ?? ''
 
-        console.log(name)
+        const {data, error} = await actions.orders.createOrder({name, order})
+
+        const inputErrors = isInputError(error) ? error.issues : []
+        if(error && inputErrors.length) {
+          inputErrors.forEach(error => toast.error(error.message))
+          return
+        }
+
+        const actionError = isActionError(error) ? error.message : null
+
+        if(actionError) {
+          toast.error(actionError)
+          return
+        }
     }
 
   return (
