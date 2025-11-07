@@ -12,3 +12,12 @@ export function toLowerFirstChar(str: string) {
 }
 
 export const calculateTotal = (order: OrderItem[]) => order.reduce((total, item) => total + (item.quantity * item.price)  ,0)
+
+export function formatOrder(order: OrderItem[]) {
+    let contents = ''
+    order.map(item => {
+        contents +=  `<li><span class="font-bold">${item.quantity} x</span> - ${item.name} ${item.size ? `(${item.size})` : ''}  - ${formatCurrency(item.price)}</li>`
+    })
+
+    return contents
+}

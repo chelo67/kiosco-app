@@ -1,5 +1,6 @@
 import { useOrderStore } from "@/stores/order"
 import { actions, isActionError } from "astro:actions"
+import { navigate } from "astro:transitions/client"
 import { toast } from "react-toastify"
 
 function isInputError(error: any): error is { issues: { message: string }[] } {
@@ -30,6 +31,14 @@ export default function SubmitOrderForm() {
         if(actionError) {
           toast.error(actionError)
           return
+        }
+
+        if(data && !error) {
+          toast.success(data.message)
+          await actions.auth.signOut()
+          setTimeout(() => {
+            navigate('/')
+          }, 5000)
         }
     }
 

@@ -16,7 +16,7 @@ export const verifySession = async(token: string) => {
     const json = await res.json()
     const user = userSchema.safeParse(json)
 
-    if(user.success) return { user:null }
+    if (!user.success) return { user: null };
 
     return {
         user: user.data

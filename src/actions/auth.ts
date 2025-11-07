@@ -22,5 +22,13 @@ export const auth = {
             
             return true
         }
+    }),
+
+    signOut: defineAction({
+        handler: (_, ctx) => {
+            ctx.cookies.delete('FRESHCOFFEE_TOKEN', {
+                path: '/',
+            })
+        }
     })
 }

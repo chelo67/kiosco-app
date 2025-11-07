@@ -1,5 +1,6 @@
 import { verifySession } from "@/auth/dal";
 import { OrderItemSchema } from "@/types";
+import { formatOrder, calculateTotal } from "@/utils";
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 
@@ -27,6 +28,42 @@ export const orders = {
                     code: 'BAD_REQUEST'
                 })
             }
+
+            const content = formatOrder(input.order)
+            const total = calculateTotal(input.order)
+
+            try {
+  const res = await fetch(`${import.meta.env.API_URL}/freshcoffee_order`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: `Orden de: ${input.name}`,
+      content,
+      status: 'publish',
+      acf: { total, status: 'pending', name: input.name }
+    })
+  });
+ 
+  console.log('Status:', res.status);
+  console.log('URL:', res.url);
+ 
+  if (!res.ok) {
+    const text = await res.text();
+    console.error('Error al crear orden:', text);
+  } else {
+    const { id } : {id: number} = await res.json();
+    return {
+      message: `Orden creada correctamente ID: ${id}`
+    }
+  }
+} catch (err) {
+  console.error('Error en createOrder:', err);
+}
+
+            
         }
     })
 }
