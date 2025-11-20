@@ -46,9 +46,7 @@ export const orders = {
       acf: { total, status: 'pending', name: input.name }
     })
   });
- 
-  console.log('Status:', res.status);
-  console.log('URL:', res.url);
+
  
   if (!res.ok) {
     const text = await res.text();

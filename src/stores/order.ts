@@ -55,7 +55,6 @@ export const useOrderStore = create<Store>()((set, get) => ({
         
         set({order})
 
-        console.log(get().order)
     },
     deleteItem: (product) => {
         const order = get().order.filter(item =>
