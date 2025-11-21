@@ -21,3 +21,7 @@ export function formatOrder(order: OrderItem[]) {
 
     return contents
 }
+
+export function nullToEmptyString(arg: unknown) {
+    return arg ?? ''
+}

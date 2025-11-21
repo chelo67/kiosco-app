@@ -1,5 +1,7 @@
 import { guestCredentials } from "@/auth/dal";
+import { nullToEmptyString } from "@/utils";
 import { defineAction } from "astro:actions";
+import { z } from "astro:schema";
 
 export const auth = {
     signinAsGuest: defineAction({
@@ -23,6 +25,24 @@ export const auth = {
             return true
         }
     }),
+
+    signIn: defineAction({
+        accept: 'form',
+        input: z.object({
+            username: z.preprocess(
+                nullToEmptyString,
+                z.string().min(1, {message: 'El Usuario no puede ir vacio'})
+            ),
+            password: z.preprocess(
+                nullToEmptyString,
+                z.string().min(1, {message: 'El Usuario no puede ir vacio'})
+            ),
+        }),
+        handler: async (input, ctx) => {
+            console.log(input)
+        }
+    }),
+
 
     signOut: defineAction({
         handler: (_, ctx) => {
